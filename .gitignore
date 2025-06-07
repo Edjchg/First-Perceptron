@@ -1,2 +1,3 @@
 *.o
-neural_network
+neural_iris_dataset
+iris_dataset/result.csv

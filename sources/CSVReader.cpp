@@ -87,6 +87,10 @@ vector<int> CSVReader::getoriginalYTestingVals(void) {
     return this->_yOriginalValuesTesting;
 }
 
+void CSVReader::setSaveDataFileName(string name) {
+    this->saveDataFileName = name;
+}
+
 void CSVReader::openFile(string filePath){
     this->_csvFile.open(filePath, ios::in);
 }
@@ -167,9 +171,9 @@ void CSVReader::dataExtractor(void) {
 
             } else {
                 /*
-                * Assuming the value is a floatant number, then we need to
-                * convert it from string to float.
-                */
+                 * Assuming the value is a floatant number, then we need to
+                 * convert it from string to float.
+                 */
                 float convertedDatum = this->safeStringToFloat(datum);
 
                 /*
@@ -305,7 +309,7 @@ void CSVReader::filterYLabelsPerToken(string token) {
 
 void CSVReader::saveDataToFile(void) {
     ofstream outputFile;
-    outputFile.open("iris_dataset/result.csv");
+    outputFile.open(this->saveDataFileName);
 
     int lenData = this->_xValues.size();
 
@@ -319,4 +323,59 @@ void CSVReader::saveDataToFile(void) {
     }
 
     outputFile.close();
+}
+
+std::vector<float> CSVReader::readWeightsFromFile(std::string fileName) {
+    fstream inputFile;
+    inputFile.open(fileName, ios::in);
+
+    string tempRow, line, datum, delimiter = ",";
+    int delimiterLen = delimiter.length();
+    vector<float> row;
+
+    while (inputFile >> tempRow) {
+
+        string tempLine(tempRow);
+        size_t position = 0;
+
+        while (tempLine.length() > 0) {
+
+            position = tempLine.find(delimiter);
+
+            if (position != string::npos){
+               /*
+                * The word will be in between the start position
+                * of the string, until the "," delimiter, so I'm
+                * getting the substring, and store that into the
+                * variable word:
+                */
+                datum = tempLine.substr(0, position);
+            } else {
+                datum = tempLine;
+            }
+
+            /*
+             * Assuming the value is a floatant number, then we need to
+             * convert it from string to float.
+             */
+            float convertedDatum = this->safeStringToFloat(datum);
+
+            /*
+             * Storing the new converted value to the row:
+             */
+            row.push_back(convertedDatum);
+
+            /*
+             * Once we read the first datum, then deleting it,
+             * so the next datum to read will be in the first
+             * position:
+             */
+            if (position != string::npos){
+                tempLine.erase(0, position + delimiterLen);
+            } else {
+                tempLine.clear();
+            }
+        }
+    }
+    return row;
 }

@@ -8,16 +8,18 @@ using namespace std;
 /**
  * Perceptron class implementation.
  *
- * A perceptron is a model of neural, and it is the simplest form of a neural network.
+ * A perceptron is a model of neuron, and it is the simplest form of a neural network.
  * It consists of a single neuron that takes multiple inputs, applies weights to them,
  * sums them up, and passes the result through an activation function to produce an output.
  */
 
-Perceptron::Perceptron() : _eta(PERCEPTRON_ETA_MIN_VALUE),
+Perceptron::Perceptron(string perceptronName) : _eta(PERCEPTRON_ETA_MIN_VALUE),
                            _n_iterations(PERCEPTRON_N_ITERATIONS_INITIAL_VALUE),
-                           _mathOps(make_unique<MathOps>()) {
+                           _mathOps(make_unique<MathOps>()),
+                           _telemetry(make_unique<PerceptronTelemetry>()) {
     // Constructor implementation:
-
+    
+    _telemetry->setName(perceptronName);
 }
 
 Perceptron::~Perceptron() {
@@ -36,6 +38,10 @@ Perceptron::~Perceptron() {
      */
     if (this->_mathOps != nullptr) {
         this->_mathOps.reset();
+    }
+
+    if (this->_telemetry != nullptr) {
+        this->_telemetry.reset();
     }
 
     this->_weights.clear();
@@ -108,13 +114,21 @@ void Perceptron::trainPerceptron(std::vector<std::vector<float>> inputXs,
          * outputs (y values):
          */
         for (int input = 0; input < lenInputs; ++input) {
+
+            /*
+             * Collecting the weights for further data processing.
+             * The idea is to graph How the weight per each feature
+             * is behaving, and see how important is a feature for
+             * the perceptron to predict accurately.
+             */
+            this->_telemetry->collectWeightsPerEpoch(this->_weights);
+
             /*
              * Excercising the perceptron, by performing a prediction,
              * this will lead to a prediction y, that will be compared
              * with the expected y, and be able to modify the weights
              * and perform better classifications:
              */
-            
             float predictedY = this->predict(inputXs.at(input));
 
             /*
@@ -122,23 +136,35 @@ void Perceptron::trainPerceptron(std::vector<std::vector<float>> inputXs,
              * to update the weights in further step, but basically
              * this is done by:
              */
-            float updateValue = this->_eta * (expectedYs.at(input) - predictedY);
+            float error = this->_eta * (expectedYs.at(input) - predictedY);
 
-
-            this->updateWeights(updateValue, inputXs.at(input));
-
+            /*
+             * Collecting the errors, for further data processing.
+             * The idea is to graph how the error is decrementing
+             * for each training phase and epochs.
+             */
+            this->_telemetry->collectErrors(error);
 
             // Update the bias:
-            this->_weights.at(0) = this->_weights.at(0) + updateValue;
+            this->_weights.at(0) = this->_weights.at(0) + error;
 
-            if (updateValue != 0.0f) {
+            /*
+             * If we found an error then we need to update the weights:
+             */
+            if (error != 0.0f) {
                 errorCounter++;
+                this->updateWeights(error, inputXs.at(input));
             }
+            this->_errors.push_back(error);
         }
-
-        this->_errors.push_back(errorCounter);
-
-    
     }
+
+    /*
+     * This point is the end of the Perceptron training. Due to
+     * that, writing weights and errors in persistent memory. So in that way
+     * the perceptron does not need to train anymore for a next
+     * execution. This is under test:
+     */
+    this->_telemetry->saveDataToFile();
     return;
 }

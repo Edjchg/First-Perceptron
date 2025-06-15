@@ -1,3 +1,4 @@
 *.o
 neural_iris_dataset
+neural_bird_dataset
 iris_dataset/result.csv

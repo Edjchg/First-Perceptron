@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 class CSVReader {
@@ -26,12 +25,15 @@ class CSVReader {
         std::vector<int> getOriginalYVals(void);
         std::vector<int> getOriginalYTrainingVals(void);
         std::vector<int> getoriginalYTestingVals(void);
+        void setSaveDataFileName(std::string name);
         // -- End Setters & Getters --
         void openFile(std::string filePath);
         void dataExtractor(void);
         void shuffleData(void);
         void filterYLabelsPerToken(std::string token);
         void saveDataToFile(void);
+        std::vector<float> readWeightsFromFile(std::string fileName);
+
 
 
     private:
@@ -40,6 +42,7 @@ class CSVReader {
         std::string _filePath;
         int _rowsNumber;
         int _colsNumber;
+        std::string saveDataFileName;
 
         std::vector<std::vector<float>> _xValues;
         std::vector<int> _yValues;

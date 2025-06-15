@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "MathOps.hpp"
+#include "PerceptronTelemetry.hpp"
 
 constexpr float PERCEPTRON_ETA_MIN_VALUE = 0.0f;
 constexpr float PERCEPTRON_ETA_MAX_VALUE = 1.0f;
@@ -13,7 +14,7 @@ constexpr int PERCEPTRON_N_ITERATIONS_INITIAL_VALUE = 0;
 class Perceptron {
     public:
         // Constructor
-        Perceptron();
+        Perceptron(std::string perceptronName);
         // Destructor
         ~Perceptron();
 
@@ -41,7 +42,8 @@ class Perceptron {
         std::vector<float> _weights;
         std::vector<float> _errors;
 
-        std::unique_ptr<MathOps> _mathOps; 
+        std::unique_ptr<MathOps> _mathOps;
+        std::unique_ptr<PerceptronTelemetry> _telemetry;
 };
 
 

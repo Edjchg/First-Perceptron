@@ -81,7 +81,7 @@ static void usePerceptronTrained(void) {
     auto uniqueLables = reader.getUniqueLables();
     auto originalYLabels = reader.getoriginalYTestingVals();
 
-    auto alreadyTrainedWeights = reader.readWeightsFromFile("bird_detector_FittestWeights.csv");
+    auto alreadyTrainedWeights = reader.readWeightsFromFile("bird_detector_statistics/bird_detector_FittestWeights.csv");
     /*
      * Need to Load the weights to the Perceptron, instead of train it:
      */

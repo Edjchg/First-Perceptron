@@ -110,8 +110,6 @@ void CSVReader::dataExtractor(void) {
          *  - datum1,datum2,...,datumN
          *  - datum1,datum2,...,datumN
          */
-        //getline(this->_csvFile, line);
-        //cout << tempRow << endl;
 
         /*
          * Creating a copy of line to split
@@ -151,7 +149,6 @@ void CSVReader::dataExtractor(void) {
             }
 
             if (columnCounter == this->_lableColumn) {
-                //cout << "Datum: " << datum << " column counter: " << columnCounter << endl;
                 /*
                  * For every found lable, the algorithm is storing it
                  * to a vector with unique value appender wrapper,
@@ -223,6 +220,7 @@ int CSVReader::getIndexOfValue(vector<string> vectorToAsk, string value) {
     if (resultantIterator != vectorToAsk.end()) {
         return distance(vectorToAsk.begin(), resultantIterator);
     }
+    // Reaching this point means that the value was not found in the vector.
     return -1;
 }
 
@@ -325,7 +323,7 @@ void CSVReader::saveDataToFile(void) {
     outputFile.close();
 }
 
-std::vector<float> CSVReader::readWeightsFromFile(std::string fileName) {
+vector<float> CSVReader::readWeightsFromFile(string fileName) {
     fstream inputFile;
     inputFile.open(fileName, ios::in);
 

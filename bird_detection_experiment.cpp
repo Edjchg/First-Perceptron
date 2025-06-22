@@ -37,7 +37,7 @@ static void perceptronTrainAndUse(void) {
     reader.openFile("nes_birdset_dataset/subset_three_species.csv");
     reader.setLableColumn(5);
     reader.dataExtractor();
-    reader.filterYLabelsPerToken("White-eared-Ground-Sparrow");
+    reader.filterYLabelsPerToken("White-eared-Ground-Sparrow"); // wegspa1
     reader.shuffleData();
     reader.setSaveDataFileName("nes_birdset_dataset/result.csv");
     reader.saveDataToFile();

@@ -6,20 +6,20 @@ using namespace std;
 CSVReader::CSVReader() {}
 CSVReader::~CSVReader(){}
 
-void CSVReader::setLableColumn(int lableColumn) {
-    this->_lableColumn = lableColumn;
+void CSVReader::setLabelColumn(int labelColumn) {
+    this->_labelColumn = labelColumn;
 }
 
-vector<vector<float>> CSVReader::getXValues(void) {
+vector<vector<float>> CSVReader::getXValues(void) const {
     return this->_xValues;
 }
 
-vector<int> CSVReader::getYValues(void) {
+vector<int> CSVReader::getYValues(void) const {
     return this->_yValues;
 }
 
-vector<string> CSVReader::getUniqueLables(void) {
-    return this->_uniqueLables;
+vector<string> CSVReader::getUniqueLabels(void) const {
+    return this->_uniqueLabels;
 }
 
 void CSVReader::setTrainingPercentage(float percentage) {
@@ -63,27 +63,27 @@ void CSVReader::setTrainingPercentage(float percentage) {
 
 }
 
-vector<vector<float>> CSVReader::getXValuesTraining(void) {
+vector<vector<float>> CSVReader::getXValuesTraining(void) const {
     return this->_xValuesTraining;
 }
-vector<vector<float>> CSVReader::getXValuesTesting(void) {
+vector<vector<float>> CSVReader::getXValuesTesting(void) const {
     return this->_xValuesTesting;
 }
-vector<int> CSVReader::getYValuesTraining(void) {
+vector<int> CSVReader::getYValuesTraining(void) const {
     return this->_yValuesTraining;
 }
-vector<int> CSVReader::getYValuesTesting(void) {
+vector<int> CSVReader::getYValuesTesting(void) const {
     return this->_yValuesTesting;
 }
 
-vector<int> CSVReader::getOriginalYVals(void){
+vector<int> CSVReader::getOriginalYVals(void) const {
     return this->_yOriginalValues;
 }
 
-vector<int> CSVReader::getOriginalYTrainingVals(void) {
+vector<int> CSVReader::getOriginalYTrainingVals(void) const {
     return this->_yOriginalValuesTraining;
 }
-vector<int> CSVReader::getoriginalYTestingVals(void) {
+vector<int> CSVReader::getOriginalYTestingVals(void) const {
     return this->_yOriginalValuesTesting;
 }
 
@@ -93,6 +93,10 @@ void CSVReader::setSaveDataFileName(string name) {
 
 void CSVReader::openFile(string filePath){
     this->_csvFile.open(filePath, ios::in);
+    if (!this->_csvFile.is_open()) {
+        cerr << "Error opening file: " << filePath << endl;
+        return;
+    }
 }
 
 void CSVReader::dataExtractor(void) {
@@ -148,9 +152,9 @@ void CSVReader::dataExtractor(void) {
                 datum = tempLine;
             }
 
-            if (columnCounter == this->_lableColumn) {
+            if (columnCounter == this->_labelColumn) {
                 /*
-                 * For every found lable, the algorithm is storing it
+                 * For every found label, the algorithm is storing it
                  * to a vector with unique value appender wrapper,
                  * this allows two important facts:
                  * - Does not store duplicated values
@@ -162,9 +166,9 @@ void CSVReader::dataExtractor(void) {
                  * Storing just the index of the uniqueLable in the
                  * corresponding unordered set, to the y values:
                  */
-                int correspondingLableIndex = this->getIndexOfValue(this->_uniqueLables, datum);
-                
-                this->_yValues.push_back(correspondingLableIndex);
+                int correspondingLabelIndex = this->getIndexOfValue(this->_uniqueLabels, datum);
+
+                this->_yValues.push_back(correspondingLabelIndex);
 
             } else {
                 /*
@@ -201,15 +205,16 @@ void CSVReader::dataExtractor(void) {
          */
         this->_xValues.push_back(row);
     }
+    this->_csvFile.close();
 }
 
 void CSVReader::uniqueValueAppend(string value) {
-    auto resultantIterator = find(this->_uniqueLables.begin(), this->_uniqueLables.end(), value);
+    auto resultantIterator = find(this->_uniqueLabels.begin(), this->_uniqueLabels.end(), value);
 
     // Checking if the element is not present in the vector:
-    if (resultantIterator == this->_uniqueLables.end()) {
+    if (resultantIterator == this->_uniqueLabels.end()) {
         // If the value is not present then append it:
-        this->_uniqueLables.push_back(value);
+        this->_uniqueLabels.push_back(value);
     }
     // If it is present then do not add it.
 }
@@ -293,7 +298,7 @@ void CSVReader::filterYLabelsPerToken(string token) {
      * Convert token to int index, to do that, need to ask
      * the unique labels the position of that token:
      */
-    int tokenIndex = this->getIndexOfValue(this->_uniqueLables, token);
+    int tokenIndex = this->getIndexOfValue(this->_uniqueLabels, token);
 
     /*
      * Iterate over the yValues and place a 1 to ones that match the token
@@ -308,6 +313,10 @@ void CSVReader::filterYLabelsPerToken(string token) {
 void CSVReader::saveDataToFile(void) {
     ofstream outputFile;
     outputFile.open(this->saveDataFileName);
+    if (!outputFile.is_open()) {
+        cerr << "Error opening file: " << this->saveDataFileName << endl;
+        return;
+    }
 
     int lenData = this->_xValues.size();
 
@@ -317,7 +326,7 @@ void CSVReader::saveDataToFile(void) {
             outputFile << xVal << " ";
         }
 
-        outputFile << "|" << this->_yValues.at(dataIndex) << " | " << this->_yOriginalValues.at(dataIndex) << " " << this->_uniqueLables.at(this->_yOriginalValues.at(dataIndex)) << endl; 
+        outputFile << "|" << this->_yValues.at(dataIndex) << " | " << this->_yOriginalValues.at(dataIndex) << " " << this->_uniqueLabels.at(this->_yOriginalValues.at(dataIndex)) << endl;
     }
 
     outputFile.close();
@@ -326,6 +335,10 @@ void CSVReader::saveDataToFile(void) {
 vector<float> CSVReader::readWeightsFromFile(string fileName) {
     fstream inputFile;
     inputFile.open(fileName, ios::in);
+    if (!inputFile.is_open()) {
+        cerr << "Error opening file: " << fileName << endl;
+        return vector<float>();
+    }
 
     string tempRow, line, datum, delimiter = ",";
     int delimiterLen = delimiter.length();
@@ -375,5 +388,6 @@ vector<float> CSVReader::readWeightsFromFile(string fileName) {
             }
         }
     }
+    inputFile.close();
     return row;
 }

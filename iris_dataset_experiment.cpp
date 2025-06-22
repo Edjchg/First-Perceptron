@@ -11,13 +11,13 @@ using namespace std;
 
 int main(void) {
 
-    Perceptron perceptron;
+    Perceptron perceptron("iris_detector");
     perceptron.setEta(0.1);
     perceptron.setNIterations(10);
 
     CSVReader reader;
     reader.openFile("iris_dataset/iris.csv");
-    reader.setLableColumn(4);
+    reader.setLabelColumn(4);
     reader.dataExtractor();
     reader.filterYLabelsPerToken("Iris-setosa");
     reader.shuffleData();
@@ -26,20 +26,20 @@ int main(void) {
 
 
     auto trainXData = reader.getXValuesTraining();
-    auto trainLables = reader.getYValuesTraining();
+    auto trainLabels = reader.getYValuesTraining();
 
-    perceptron.trainPerceptron(trainXData, trainLables);
+    perceptron.trainPerceptron(trainXData, trainLabels);
 
     auto testXData = reader.getXValuesTesting();
     auto testYData = reader.getYValuesTesting();
-    auto uniqueLables = reader.getUniqueLables();
-    auto originalYLabels = reader.getoriginalYTestingVals();
+    auto uniqueLabels = reader.getUniqueLabels();
+    auto originalYLabels = reader.getOriginalYTestingVals();
 
     cout << "Size of test data: " << testXData.size() << endl;
 
     int index = 0;
     for (auto xVal : testXData) {
-        cout << "Consulted plant " << index << " was " << uniqueLables.at(originalYLabels.at(index)) << " Is this plant Iris-setosa ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
+        cout << "Consulted plant " << index << " was " << uniqueLabels.at(originalYLabels.at(index)) << " Is this plant Iris-setosa ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
         index++;
     }
 

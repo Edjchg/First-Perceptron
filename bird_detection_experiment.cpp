@@ -35,7 +35,7 @@ static void perceptronTrainAndUse(void) {
 
     CSVReader reader;
     reader.openFile("nes_birdset_dataset/subset_three_species.csv");
-    reader.setLableColumn(5);
+    reader.setLabelColumn(5);
     reader.dataExtractor();
     reader.filterYLabelsPerToken("White-eared-Ground-Sparrow"); // wegspa1
     reader.shuffleData();
@@ -51,8 +51,8 @@ static void perceptronTrainAndUse(void) {
 
     auto testXData = reader.getXValuesTesting();
     auto testYData = reader.getYValuesTesting();
-    auto uniqueLables = reader.getUniqueLables();
-    auto originalYLabels = reader.getoriginalYTestingVals();
+    auto uniqueLabels = reader.getUniqueLabels();
+    auto originalYLabels = reader.getOriginalYTestingVals();
 
     /*cout << "Size of test data: " << testXData.size() << endl;
 
@@ -67,7 +67,7 @@ static void usePerceptronTrained(void) {
 
     CSVReader reader;
     reader.openFile("nes_birdset_dataset/subset_three_species.csv");
-    reader.setLableColumn(5);
+    reader.setLabelColumn(5);
     reader.dataExtractor();
     reader.filterYLabelsPerToken("White-eared-Ground-Sparrow");
     reader.shuffleData();
@@ -78,8 +78,8 @@ static void usePerceptronTrained(void) {
 
     auto testXData = reader.getXValuesTesting();
     auto testYData = reader.getYValuesTesting();
-    auto uniqueLables = reader.getUniqueLables();
-    auto originalYLabels = reader.getoriginalYTestingVals();
+    auto uniqueLabels = reader.getUniqueLabels();
+    auto originalYLabels = reader.getOriginalYTestingVals();
 
     auto alreadyTrainedWeights = reader.readWeightsFromFile("bird_detector_statistics/bird_detector_FittestWeights.csv");
     /*
@@ -90,7 +90,7 @@ static void usePerceptronTrained(void) {
     
     int index = 0;
     for (auto xVal : testXData) {
-        cout << "Consulted bird " << index << " was " << uniqueLables.at(originalYLabels.at(index)) << " Is this bird White-eared Ground-Sparrow ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
+        cout << "Consulted bird " << index << " was " << uniqueLabels.at(originalYLabels.at(index)) << " Is this bird White-eared Ground-Sparrow ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
         index++;
     }
 }

@@ -21,18 +21,18 @@ class CSVReader {
         ~CSVReader();
 
         // -- Setters & Getters --
-        void setLableColumn(int lableColumn);
-        std::vector<std::vector<float>> getXValues(void);
-        std::vector<int> getYValues(void); // Lables
-        std::vector<std::string> getUniqueLables(void);
+        void setLabelColumn(int labelColumn);
+        std::vector<std::vector<float>> getXValues(void) const; // Features
+        std::vector<int> getYValues(void) const; // Labels
+        std::vector<std::string> getUniqueLabels(void) const;
         void setTrainingPercentage(float percentage);
-        std::vector<std::vector<float>> getXValuesTraining(void);
-        std::vector<std::vector<float>> getXValuesTesting(void);
-        std::vector<int> getYValuesTraining(void);
-        std::vector<int> getYValuesTesting(void);
-        std::vector<int> getOriginalYVals(void);
-        std::vector<int> getOriginalYTrainingVals(void);
-        std::vector<int> getoriginalYTestingVals(void);
+        std::vector<std::vector<float>> getXValuesTraining(void) const;
+        std::vector<std::vector<float>> getXValuesTesting(void) const;
+        std::vector<int> getYValuesTraining(void) const;
+        std::vector<int> getYValuesTesting(void) const;
+        std::vector<int> getOriginalYVals(void) const;
+        std::vector<int> getOriginalYTrainingVals(void) const;
+        std::vector<int> getOriginalYTestingVals(void) const;
         void setSaveDataFileName(std::string name);
         // -- End Setters & Getters --
 
@@ -59,9 +59,9 @@ class CSVReader {
         void shuffleData(void);
 
         /**
-         * @brief   This function changes the lables into -1 or 1 depending
-         *          on the token, if the lable is equal to the token then
-         *          the original lable will be replaced to 1, -1 otherwise.
+         * @brief   This function changes the labels into -1 or 1 depending
+         *          on the token, if the label is equal to the token then
+         *          the original label will be replaced to 1, -1 otherwise.
          *
          * @details The perceptron only can train with a data set that is
          *          classified between the data corresponding to the token
@@ -89,7 +89,7 @@ class CSVReader {
 
     private:
         std::fstream _csvFile;
-        int _lableColumn;
+        int _labelColumn;
         std::string _filePath;
         int _rowsNumber;
         int _colsNumber;
@@ -108,17 +108,17 @@ class CSVReader {
         std::vector<int> _yOriginalValuesTesting;
 
         /*
-         * There is a need to store all the lables in
+         * There is a need to store all the labels in
          * one list, without repeated values. While the
          * reader is reading the file, it needs to store
          * any new lable found, but at the same time,
          * assign a float key, so that key could be
          * assigned to yValues. 
          */
-        std::vector<std::string> _uniqueLables;
+        std::vector<std::string> _uniqueLabels;
 
         /**
-         * @brief This function appends a value to _uniqueLables but before
+         * @brief This function appends a value to _uniqueLabels but before
          *        adding it, checks that the value is not already added,
          *        ensuring the values inside the vector are not repeated.
          *

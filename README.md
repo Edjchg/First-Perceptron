@@ -129,6 +129,28 @@ Consulted bird 2 was Chestnut-capped-Brushfinch. Is this bird White-eared Ground
 (...)
 ```
 
+# Steps to compile the Use case:
+
+You need to go to the root of the repository and simply execute:
+
+Compile it by:
+
+```
+make neural_bird_dataset
+```
+
+Run the binary by:
+
+```
+make run_neural_bird_dataset
+```
+
+Clean the binaries:
+
+```
+make clean
+```
+
 # References
 [1] Álvaro Vega-Hidalgo, Stefan Kahl, Laurel B. Symes, Viviana Ruiz-Gutiérrez, Ingrid Molina-Mora, Fernando Cediel, Luis Sandoval, & Holger Klinck. (2023). A collection of fully-annotated soundscape recordings from neotropical coffee farms in Colombia and Costa Rica (Versión 1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7525349
 

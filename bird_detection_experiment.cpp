@@ -54,13 +54,13 @@ static void perceptronTrainAndUse(void) {
     auto uniqueLabels = reader.getUniqueLabels();
     auto originalYLabels = reader.getOriginalYTestingVals();
 
-    /*cout << "Size of test data: " << testXData.size() << endl;
+    cout << "Size of test data: " << testXData.size() << endl;
 
     int index = 0;
     for (auto xVal : testXData) {
-        cout << "Consulted bird " << index << " was " << uniqueLables.at(originalYLabels.at(index)) << " Is this bird Chestnut-capped Brushfinch ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
+        cout << "Consulted bird " << index << " was " << uniqueLabels.at(originalYLabels.at(index)) << " Is this bird Chestnut-capped Brushfinch ? Perceptron answer: " << (perceptron.predict(xVal) == 1 ? "yes" : "no") << endl;
         index++;
-    }*/
+    }
 }
 
 static void usePerceptronTrained(void) {

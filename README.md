@@ -20,7 +20,7 @@ Even this Perceptron is a Single Layer one, it has stages/layers that are going 
 
 1. Inputs
 2. Weights
-3. Sumatory
+3. Summatory
 4. Step function
 5. Output
 
@@ -58,7 +58,7 @@ $$
 
 Note that `I` and `W` have the same size `n`.
 
-Then, the dot product between `I` and `W` can be define like:
+Then, the dot product between `I` and `W` can be defined as:
 $$
 I \cdot W = \sum_{i=1}^n I_i \cdot W_i
 $$
@@ -150,6 +150,10 @@ Clean the binaries:
 ```
 make clean
 ```
+
+# Further Work
+
+From this project, the idea is to develop a neural network based on layers of instances of this Perceptron.
 
 # References
 [1] Álvaro Vega-Hidalgo, Stefan Kahl, Laurel B. Symes, Viviana Ruiz-Gutiérrez, Ingrid Molina-Mora, Fernando Cediel, Luis Sandoval, & Holger Klinck. (2023). A collection of fully-annotated soundscape recordings from neotropical coffee farms in Colombia and Costa Rica (Versión 1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7525349
